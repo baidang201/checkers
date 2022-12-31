@@ -17,6 +17,10 @@ func (k msgServer) RejectGame(goCtx context.Context, msg *types.MsgRejectGame) (
 		return nil, sdkerrors.Wrapf(types.ErrGameNotFound, "%s", msg.GameIndex)
 	}
 
+	if storedGame.Winner != rules.PieceStrings[rules.NO_PLAYER] {
+			return nil, types.ErrGameFinished
+	}
+
 	if storedGame.Black == msg.Creator {
     if 0 < storedGame.MoveCount { // Notice the use of the new field
         return nil, types.ErrBlackAlreadyPlayed
